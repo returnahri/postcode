@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<style>html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#fff}#wrap{width:100%;height:100%}</style>
+</head>
+<body>
+<div id="wrap"></div>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+new daum.Postcode({
+  oncomplete: function(data) {
+    var addr = data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress;
+    var msg = JSON.stringify({ address: addr, zonecode: data.zonecode });
+    if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+      window.ReactNativeWebView.postMessage(msg);
+    } else if (window.parent && window.parent.postMessage) {
+      window.parent.postMessage(msg, '*');
+    }
+  },
+  width: '100%',
+  height: '100%'
+}).embed(document.getElementById('wrap'));
+</script>
+</body>
+</html>
+```
